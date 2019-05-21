@@ -12,6 +12,7 @@ using RealEstateManager.Database;
 using RealEstateManager.Queries;
 using RealEstateManager.Schema;
 using RealEstateManager.Types;
+using RealEstateManager.Types.Payment;
 
 namespace RealEstateManager
 {
@@ -29,11 +30,13 @@ namespace RealEstateManager
         {
             services.AddMvc();
             services.AddTransient<IPropertyRepository, PropertyRepository>();
+            services.AddTransient<IPaymentRepository, PaymentRepository>();
 
             services.AddDbContext<RealEstateContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:RealEstateDb"]));
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             services.AddSingleton<PropertyQuery>();
             services.AddSingleton<PropertyType>();
+            services.AddSingleton<PaymentType>();
             var sp = services.BuildServiceProvider();
             services.AddSingleton<ISchema>(new RealEstateManagerSchema(new FuncDependencyResolver(type => sp.GetService(type))));
         }
